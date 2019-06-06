@@ -52,7 +52,7 @@ contract EventTickets {
       _;
     }
 
-    modifier isOpen() {
+    modifier isOpened() {
       require(myEvent.isOpen, "Event is closed");
       _;
     }
@@ -110,7 +110,7 @@ contract EventTickets {
             - refund any surplus value sent with the transaction
             - emit the appropriate event
     */
-    function buyTickets(uint _num) public payable isOpen() {
+    function buyTickets(uint _num) public payable isOpened() {
       require(_num <= (myEvent.totalTickets - myEvent.sales), "not enough tickets in stock");
       require(msg.value >= _num * TICKET_PRICE, "not paid enough");
       myEvent.buyers[msg.sender] += _num;
@@ -131,7 +131,7 @@ contract EventTickets {
             - Transfer the appropriate amount to the refund requester.
             - Emit the appropriate event.
     */
-    function getRefund() public isOpen {
+    function getRefund() public isOpened {
       require(myEvent.buyers[msg.sender] > 0);
       uint num = myEvent.buyers[msg.sender];
       myEvent.buyers[msg.sender] = 0;
@@ -150,7 +150,7 @@ contract EventTickets {
             - transfer the contract balance to the owner
             - emit the appropriate event
     */
-    function endSale() public onlyOwner isOpen {
+    function endSale() public onlyOwner isOpened {
       myEvent.isOpen = false;
       uint balance = address(this).balance;
       owner.transfer(balance);
