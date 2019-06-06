@@ -51,7 +51,7 @@ contract EventTicketsV2 {
       _;
     }
 
-    modifier isOpen(uint _eventId) {
+    modifier isOpened(uint _eventId) {
       require(events[_eventId].isOpen, "the event is closed");
       _;
     }
@@ -111,7 +111,7 @@ contract EventTicketsV2 {
             - refunds any surplus value sent
             - emits the appropriate event
     */
-    function buyTickets(uint _eventId, uint _numTickets) public payable isOpen(_eventId) {
+    function buyTickets(uint _eventId, uint _numTickets) public payable isOpened(_eventId) {
       require(_numTickets <= (events[_eventId].totalTickets - events[_eventId].sales), "no enough available tickets");
       require(msg.value >= _numTickets * PRICE_TICKET, "not paid enough");
       events[_eventId].buyers[msg.sender] += _numTickets;
@@ -133,7 +133,7 @@ contract EventTicketsV2 {
             - send appropriate value to the refund requester
             - emit the appropriate event
     */
-    function getRefund(uint _eventId) public isOpen(_eventId) {
+    function getRefund(uint _eventId) public isOpened(_eventId) {
       require(events[_eventId].buyers[msg.sender] > 0);
       uint numTickets = events[_eventId].buyers[msg.sender];
       events[_eventId].buyers[msg.sender] = 0;
@@ -161,7 +161,7 @@ contract EventTicketsV2 {
             - transfer the balance from those event sales to the contract owner
             - emit the appropriate event
     */
-    function endSale(uint _eventId) public onlyOwner isOpen(_eventId) {
+    function endSale(uint _eventId) public onlyOwner isOpened(_eventId) {
       events[_eventId].isOpen = false;
       uint balance = events[_eventId].sales * PRICE_TICKET;
       owner.transfer(balance);
