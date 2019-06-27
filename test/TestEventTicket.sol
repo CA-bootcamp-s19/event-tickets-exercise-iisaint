@@ -139,7 +139,7 @@ contract TestEventTicket {
 
   // helper function
   function fixWarning(bool r) internal pure {
-
+    r;
   }
   
   // fallback to receive refund

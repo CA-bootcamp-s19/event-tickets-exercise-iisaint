@@ -154,6 +154,6 @@ contract testEventTicketV2 {
   }
 
   function fixWarning(bool r) internal pure {
-
+    r;
   }
 }
