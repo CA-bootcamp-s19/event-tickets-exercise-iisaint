@@ -22,7 +22,7 @@ contract testSecondAccount {
   }
 }
 
-contract testEventTicketV2 {
+contract TestEventTicketV2 {
   uint public initialBalance = 1 ether;
 
   address firstAccount = address(this);
